@@ -1,0 +1,82 @@
+for 
+movl $1 ,-8(%ebp)
+movl $1 , %eac #i
+cmpl 12(ebp),%eax
+JAE fi
+imul 4 ,%eax , %ecx
+movl 8(%ecx,%ebp) , %edx
+cmpl  %edx,-4(ebp)
+jae fi_if
+movl %edx, -4(ebp)
+fi_if
+add $1 ,%eac
+
+
+
+
+
+
+
+
+////////////////////////
+
+movl $0, -4(%ebp)
+movl $0 ,-8(%ebp)
+cmpl 3 , -8(%ebp)
+jae fi
+movl $0, -12 (%ebp)
+cmpl 3 , -12(%ebp)
+jae fi1
+imul $4 , -12(%ebp), %eax 
+imul $12 , -8(%ebp) ,%ecx
+add 8(%epb) , %ecx
+movl (%ecx,%eax) , %ecx
+add  -4(%ebp), %ecx
+add $1,-12(ebp)
+fi1
+add $1,-8(ebp)
+fi
+
+
+/////////////////////////// 
+.text
+	.align 4
+	.globl OperaVec
+	.type	OperaVec, @function
+OperaVec:
+	pushl	%ebp
+	movl	%esp, %ebp
+	subl	$16, %esp
+	pushl	%ebx
+	pushl	%esi
+	pushl	%edi
+	movl	8(%ebp), %eax
+	movl	(%eax), %eax
+	movl	%eax, -4(%ebp)
+# Aqui has de introducir el codigo
+movl $1 , %eax #I=1
+
+for:
+    cmpl 12(%ebp),%eax 
+    JGE fi
+    #imul $4 ,%eax , %ecx
+    movl 8(%ebp), %edi
+    movl (%edi,%eax,4), %edx #@Vectori
+    cmpl  -4(%ebp),%edx #vectori >= res
+    jGE fi_if
+    movl %edx, -4(%ebp)
+fi_if:
+    incl %eax
+    JMP for
+fi:
+    movl %eax,-8(%ebp)
+
+
+# El final de la rutina ya esta programado
+	movl	-4(%ebp), %eax
+	popl	%edi
+	popl	%esi
+	popl	%ebx
+	movl %ebp,%esp
+	popl %ebp
+	ret
